@@ -12,10 +12,12 @@ const port = process.env.PORT || 3000;
 const databaseUrl = process.env.DATABASE_URL;
 
 app.use(cors({
-    origin: process.env.ORIGIN,
+    origin: [process.env.ORIGIN],
     methods: ['GET','POST','DELETE','PUT','PATCH'],
     credentials: true,
 }))
+
+app.use("/uploads/profiles",express.static("uploads/profiles"));
 app.use(cookieParser());
 app.use(express.json());
 app.use("/api/auth/",authRoutes)
