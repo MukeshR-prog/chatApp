@@ -33,7 +33,7 @@ export const getContactsForDMList = async (req, res, next) => {
     const contacts = await Message.aggregate([
       {
         $match: {
-          $or: [{ sender: userId }, { receiver: userId }],
+          $or: [{ sender: userId }, { recipient: userId }],
         },
       },
       {
@@ -44,7 +44,7 @@ export const getContactsForDMList = async (req, res, next) => {
           _id: {
             $cond: {
               if: { $eq: ["$sender", userId] },
-              then: "$receiver",
+              then: "$recipient",
               else: "$sender",
             },
           },
