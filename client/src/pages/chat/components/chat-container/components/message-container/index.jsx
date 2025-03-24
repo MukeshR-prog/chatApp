@@ -34,6 +34,12 @@ const MessageContainer = () => {
       scrollRef.current.scrollIntoView({ behavior: "smooth" });
     }
   }, [selectedChatMessages]);
+
+const checkIfImage = (filePath) => {
+  const imagrRegex = /\.(jpg|jpeg|png|gif|svg|ico|heic|heif|webf|tif|tiff|bmp)$/i;
+  return imagrRegex.test(filePath);
+};
+
   const renderMessages = () => {
     let lastDate = null;
     return selectedChatMessages.map((message, index) => {
@@ -71,7 +77,17 @@ const MessageContainer = () => {
             {message.content}
           </div>
         )}
-
+  {
+    message.messageType==="file" &&  <div
+    className={`${
+      message.sender !== selectedChatData._id
+        ? "bg-[#8417ff]/5 text-[#8417ff]/90 border-[#8417ff]/50"
+        : " bg-[#2a2b33]/5 text-white/80 border-[#ffffff]/20"
+    } border inline-block px-4 py-2 rounded my-1 max-w-[50%] break-words`}
+  >
+    {checkIfImage(message.fileUrl)}
+  </div>
+  }
         <div className="text-xs text-gray-500">
           {moment(message.timestamp).format("LT")}
         </div>
