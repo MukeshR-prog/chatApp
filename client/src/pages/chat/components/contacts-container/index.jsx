@@ -3,23 +3,31 @@ import React, { useEffect } from 'react'
 import ProfileInfo from './components/profile-info'
 import NewDm from './components/new-dm'
 import { apiClient } from '@/lib/api-client'
-import { GET_DM_CONTACT_ROUTES } from '@/utils/constants'
+import { GET_DM_CONTACT_ROUTES, GET_USER_CHANNEL } from '@/utils/constants'
 import { useAppStore } from '@/store'
 import ContactLists from '@/components/contact-list'
+import CreateChannel from './components/create-channel'
 
 const ContactContainer = () => {
-    const { directMessagesContacts,setDirectMessagesContacts } = useAppStore();
+    const { directMessagesContacts,setDirectMessagesContacts,channels,setChannels } = useAppStore();
     useEffect(() =>{
         const getContacts= async () => {
             const res = await apiClient.get(GET_DM_CONTACT_ROUTES,{withCredentials:true})
             if(res.data.contacts){
                 console.log("response   : ",res.data.contacts)
                 setDirectMessagesContacts(res.data.contacts)
-                // console.log("set response :",directMessagesContacts)
+            }
+        };
+        const getChannels= async () => {
+            const res = await apiClient.get(GET_USER_CHANNEL,{withCredentials:true})
+            if(res.data.channels){
+                console.log("response channel : ",res.data.contacts)
+                setChannels(res.data.channels)
             }
         };
         getContacts()
-    },[setDirectMessagesContacts]);
+        getChannels()
+    },[setDirectMessagesContacts,setChannels]);
     useEffect(() => {
         console.log("Updated state:", directMessagesContacts);
       }, [directMessagesContacts]);
@@ -40,6 +48,10 @@ const ContactContainer = () => {
     <div className='my-3'>
         <div className='flex items-center justify-between pr-10'>
             <Title text='Channels'/>
+            <CreateChannel/>
+        </div>
+        <div className={`max-h-[38vh] overflow-y-auto ${directMessagesContacts.length > 5 ? 'scrollbar-hide' : ''}`}  style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+            <ContactLists contacts={channels} isChannel={true}/>
         </div>
     </div>
     <ProfileInfo/>
