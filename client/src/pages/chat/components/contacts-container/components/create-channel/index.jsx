@@ -73,7 +73,7 @@ const CreateChannel = () => {
             />
           </TooltipTrigger>
           <TooltipContent>
-            <p>Create New Channel</p>
+            <p>Create New Channel </p>
           </TooltipContent>
         </Tooltip>
       </TooltipProvider>
