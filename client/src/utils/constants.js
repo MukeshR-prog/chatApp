@@ -27,3 +27,4 @@ export const UPLOAD_FILE_ROUTE = `${MESSAGES_ROUTES}/upload-file`;
 export const CHANNEL_ROUTES = "api/channel";
 export const CREATE_CHANNELS = `${CHANNEL_ROUTES}/create-channel`;
 export const GET_USER_CHANNEL = `${CHANNEL_ROUTES}/get-user-channels`;
+export const GET_CHANNAL_MESSAGES = `${CHANNEL_ROUTES}/get-channal-messages`;

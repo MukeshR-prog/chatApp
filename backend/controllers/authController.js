@@ -45,10 +45,14 @@ export const login = async (req, res, next) => {
     if (!user) {
       return res.status(404).send("Email is not found");
     }
+    console.log("Stored Hashed Password:", user.password);
+    console.log("Entered Password:", password);
     const auth = await compare(password, user.password);
+    console.log("Password Match:", auth);
     if (!auth) {
       return res.status(400).send("Password is incorrect");
     }
+
     const token = createToken(email, user.id);
     res.cookie("jwt", token, {
       maxAge: 3 * 24 * 60 * 60 * 1000,

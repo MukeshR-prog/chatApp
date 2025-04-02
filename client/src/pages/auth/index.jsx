@@ -48,19 +48,31 @@ const Auth = () => {
   return true;
 }
 
-  const handleLogin = async () => {
-    if(validateLogin()) {
-      const res = await apiClient.post(LOGIN_ROUTE,{email,password},{withCredentials: true});
-      if(res.data.user.id){
+const handleLogin = async () => {
+  if (validateLogin()) {
+    try {
+      const res = await apiClient.post(LOGIN_ROUTE, { email, password }, { withCredentials: true });
+
+      if (res.data.user?.id) {
         setUserInfo(res.data.user);
-        if(res.data.user.profileSetup){
-          navigate("/chat")
+        if (res.data.user.profileSetup) {
+          navigate("/chat");
+        } else {
+          navigate("/profile");
         }
-        else navigate("/profile"); 
       }
-      console.log(res,res.status)
+    } catch (error) {
+      if (error.response?.status === 400 && error.response.data === "Password is incorrect") {
+        toast.error("Incorrect password. Please try again.");
+      } else if (error.response?.status === 404) {
+        toast.error("Email not found. Please check your email.");
+      } else {
+        toast.error("Login failed. Please try again.");
+      }
     }
-  };
+  }
+};
+
   const handleSignup = async () => {
     if(validateSignup()) {
       const res = await apiClient.post(SIGNUP_ROUTE,{email,password},{withCredentials: true})
