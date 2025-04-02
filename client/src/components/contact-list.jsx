@@ -69,7 +69,7 @@ const ContactLists = ({ contacts, isChannel = false }) => {
               <span className="text-xs text-neutral-300">{contact?.name}</span>
             ) : (
               <span className="text-xs text-neutral-300">
-                {contact?.firstName} {contact?.lastName}
+                {contact?.firstName ? `${contact?.firstName} ${contact?.lastName}` : contact?.email }
               </span>
             )}
           </div>
