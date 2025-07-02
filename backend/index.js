@@ -8,7 +8,8 @@ import contactRoute from "./routes/contactRoutes.js";
 import setupSocket from "./socket.js";
 import messagesRoutes from "./routes/messagesRoutes.js";
 import channelRoutes from "./routes/channelRoutes.js";
-
+import Path from "path";
+import { fileURLToPath } from "url";
 dotenv.config();
 
 const app = express();
@@ -31,9 +32,6 @@ app.use("/api/auth/",authRoutes)
 app.use("/api/contacts",contactRoute)
 app.use("/api/messages",messagesRoutes)
 app.use("/api/channel",channelRoutes)
-app.get('/',(req,res)=>{
-    res.send("hello world");
-})
 const server = app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 });
@@ -46,3 +44,18 @@ mongoose.connect(databaseUrl).then(() => {
     console.error(err.message);
     process.exit(1);
 });
+
+
+const __filename = fileURLToPath(import.meta.url);
+const dirname = Path.dirname(__filename);
+if (process.env.NODE_ENV === "production") {
+    app.use(express.static(Path.join(dirname, "../client/dist")));
+    app.get("*", (req, res) => {
+        res.sendFile(Path.resolve(dirname, "client","dist","index.html"));
+    }); 
+}
+else{
+    app.get("/", (req, res) => {
+        res.send("API is running...");
+    });
+}
