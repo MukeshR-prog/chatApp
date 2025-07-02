@@ -31,11 +31,12 @@ app.use("/api/auth/",authRoutes)
 app.use("/api/contacts",contactRoute)
 app.use("/api/messages",messagesRoutes)
 app.use("/api/channel",channelRoutes)
+app.get('/',(req,res)=>{
+    res.send("hello world");
+})
 const server = app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 });
-
-
 setupSocket(server);
 
 mongoose.connect(databaseUrl).then(() => {
