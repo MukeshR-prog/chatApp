@@ -9,12 +9,80 @@ import {
 } from "../../components/ui/tabs";
 import { Input } from "../../components/ui/input";
 import { Button } from "../../components/ui/button";
+import { toast } from "sonner";
+import { apiClient } from "@/lib/api-client"
+import { LOGIN_ROUTE, SIGNUP_ROUTE } from "@/utils/constants";
+import { useNavigate } from "react-router-dom";
+import { useAppStore } from "@/store";
 const Auth = () => {
+
+  const navigate = useNavigate();
+  const { setUserInfo } = useAppStore();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const handleLogin = async () => {};
-  const handleSignup = async () => {};
+  const validateLogin=() => {
+    if(!email.length) {
+      toast.error("Please enter the email");
+      return false;
+    }
+    if(!password.length) {
+      toast.error("Please enter the password");
+      return false;
+    }
+    return true;
+  }
+  const validateSignup = () => {
+    if(!email.length) {
+      toast.error("Please enter the email");
+      return false;
+  }
+  if(!password.length) {
+      toast.error("Please enter the password");
+      return false;
+  }
+  if(password !== confirmPassword) {
+    toast.error("Passwords do not match");
+      return false;
+    }
+  return true;
+}
+
+const handleLogin = async () => {
+  if (validateLogin()) {
+    try {
+      const res = await apiClient.post(LOGIN_ROUTE, { email, password }, { withCredentials: true });
+
+      if (res.data.user?.id) {
+        setUserInfo(res.data.user);
+        if (res.data.user.profileSetup) {
+          navigate("/chat");
+        } else {
+          navigate("/profile");
+        }
+      }
+    } catch (error) {
+      if (error.response?.status === 400 && error.response.data === "Password is incorrect") {
+        toast.error("Incorrect password. Please try again.");
+      } else if (error.response?.status === 404) {
+        toast.error("Email not found. Please check your email.");
+      } else {
+        toast.error("Login failed. Please try again.");
+      }
+    }
+  }
+};
+
+  const handleSignup = async () => {
+    if(validateSignup()) {
+      const res = await apiClient.post(SIGNUP_ROUTE,{email,password},{withCredentials: true})
+      if(res.status === 201) {
+        setUserInfo(res.data.user);
+        navigate("/profile");
+      }
+      console.log(res, res.status)
+    }
+  };
 
   return (
     <div className="h-[100vh] w-screen flex items-center justify-center">
@@ -30,7 +98,7 @@ const Auth = () => {
             </p>
           </div>
           <div className="flex items-center justify-center w-full">
-            <Tabs className="w-3/4" defaultValue="signup">
+            <Tabs className="w-3/4" defaultValue="login">
               <TabsList className="bg-transparent rounded-none w-full">
                 <TabsTrigger
                   className="data-[state=active]:bg-transparent text-black text-opacity-90 border-b-2 rounded-none w-full data-[state=active]:text-black data-[state=active]: font-semibold data-[state=active]:border-b-purple-500 p-3 transition-all duration-300"
