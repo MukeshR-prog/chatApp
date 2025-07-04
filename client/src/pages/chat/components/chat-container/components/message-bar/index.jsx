@@ -150,57 +150,55 @@ const MessageBar = () => {
   //   </div>
   // );
 
-  return (
-    <div className="w-full h-[9vh] mb-5 flex flex-row justify-between px-2 gap-3">
-      <div className="flex w-full rounded-md bg-[#2a2b33] flex-row justify-between px-2 items-center">
+return (
+  <div className="w-full h-[9vh] mb-5 flex flex-row justify-between items-center px-2 gap-2 sm:gap-3">
+    <div className="flex flex-1 h-full rounded-md bg-[#2a2b33] flex-row justify-between px-2 sm:px-3 items-center">
+      <input
+        type="text"
+        placeholder="Type a message..."
+        value={message}
+        onChange={(e) => setMessage(e.target.value)}
+        className="bg-transparent text-white placeholder-neutral-400 p-2 sm:p-3 rounded-md flex-1 focus:border-none focus:outline-none"
+      />
+      <div className="flex flex-row gap-2 sm:gap-3 items-center ml-2">
+        <button
+          onClick={handleAttachFile}
+          className="text-neutral-500 focus:border-none focus:outline-none hover:text-white focus:text-white duration-300 transition-all"
+        >
+          <GrAttachment className="text-lg sm:text-xl" />
+        </button>
         <input
-          type="text"
-          placeholder="Type a message..."
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-          className=" p-4 rounded-md w-full focus:border-none focus:outline-none"
+          className="hidden"
+          type="file"
+          onChange={handleAttachmentChange}
+          ref={fileInputRef}
         />
-        <div className="flex flex-row gap-4 items-center">
+        <div className="relative">
           <button
-            onClick={handleAttachFile}
-            className="text-neutral-500 focus:border-none focus:outline-none focus:text-white duration-300 transition-all"
+            onClick={() => setShowEmojiPicker(!showEmojiPicker)}
+            className="text-neutral-500 focus:border-none focus:outline-none hover:text-white focus:text-white duration-300 transition-all"
           >
-            <GrAttachment className="text-2xl" />
+            <RiEmojiStickerLine className="text-lg sm:text-xl mt-1.5" />
           </button>
-          <input
-            className="hidden"
-            type="file"
-            onChange={handleAttachmentChange}
-            ref={fileInputRef}
-          />
-          <div className="relative">
-            <button
-              onClick={() => setShowEmojiPicker(!showEmojiPicker)}
-              className="text-neutral-500 focus:border-none focus:outline-none focus:text-white duration-300 transition-all"
-            >
-              <RiEmojiStickerLine className="text-2xl" />
-            </button>
-            <div className="absolute bottom-16 right-0" ref={emojiRef}>
-              <EmojiPicker
-                theme="dark"
-                onEmojiClick={handleAddEmoji}
-                open={showEmojiPicker}
-                autoFocusSearch={false}
-              />
-            </div>
+          <div className="absolute bottom-16 right-0 z-50" ref={emojiRef}>
+            <EmojiPicker
+              theme="dark"
+              onEmojiClick={handleAddEmoji}
+              open={showEmojiPicker}
+              autoFocusSearch={false}
+            />
           </div>
         </div>
       </div>
-      <div>
-      <button
-        onClick={handleSendMessage}
-        className="bg-[#8417ff] rounded-md flex items-center justify-center p-5 focus:border-none hover:bg-[#741bda] focus:bg-[#741bda] focus:outline-none focus:text-white duration-300 transition-all"
-      >
-        <IoSend className="text-2xl" />
-      </button>
-      </div>
     </div>
-  );
+    <button
+      onClick={handleSendMessage}
+      className="bg-[#8417ff] rounded-md flex items-center justify-center h-full aspect-square min-w-[3rem] sm:min-w-[3.5rem] focus:border-none hover:bg-[#741bda] focus:bg-[#741bda] focus:outline-none focus:text-white duration-300 transition-all"
+    >
+      <IoSend className="text-lg sm:text-xl" />
+    </button>
+  </div>
+);
 };
 
 export default MessageBar;
