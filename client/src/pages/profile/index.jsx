@@ -18,6 +18,7 @@ const Profile = () => {
   const [image, setImage] = useState(null);
   const [hovered, setHovered] = useState(false);
   const [selectedColor, setSelectedColor] = useState(0);
+  const [saveLoading, setSaveLoading] = useState(false);
   const fileInputRef = useRef(null);
   useEffect(() => {
     if (userInfo.profileSetup) {
@@ -38,6 +39,7 @@ const Profile = () => {
   }
   const saveChanges = async () => {
      if(validateProfile()) {
+      setSaveLoading(true);
       try {
         const res = await apiClient.post(UPDATE_PROFILE_ROUTE,{firstName,lastName,color:selectedColor},{withCredentials:true})
         if (res.status === 200 && res.data) {
@@ -47,7 +49,10 @@ const Profile = () => {
         }
       } catch (error) {
         console.error(error);
-      } 
+        toast.error("Failed to update profile");
+      } finally {
+        setSaveLoading(false);
+      }
      }
   };
   const handleNavigate =() => {
@@ -185,8 +190,9 @@ const Profile = () => {
           <Button
             className="h-16 w-full bg-purple-700 hover:bg-purple-900 transition-all duration-300"
             onClick={saveChanges}
+            loading={saveLoading}
           >
-            Save Changes
+            {saveLoading ? "Saving..." : "Save Changes"}
           </Button>
         </div>
       </div>

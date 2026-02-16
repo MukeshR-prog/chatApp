@@ -29,3 +29,7 @@ export const CHANNEL_ROUTES = "api/channel";
 export const CREATE_CHANNELS = `${CHANNEL_ROUTES}/create-channel`;
 export const GET_USER_CHANNEL = `${CHANNEL_ROUTES}/get-user-channels`;
 export const GET_CHANNAL_MESSAGES = `${CHANNEL_ROUTES}/get-channal-messages`;
+export const GET_CHANNEL_DETAILS = `${CHANNEL_ROUTES}/get-channel-details`;
+export const UPDATE_CHANNEL_MEMBERS = `${CHANNEL_ROUTES}/update-channel-members`;
+export const ADD_CHANNEL_MEMBER = `${CHANNEL_ROUTES}/add-channel-member`;
+export const REMOVE_CHANNEL_MEMBER = `${CHANNEL_ROUTES}/remove-channel-member`;
