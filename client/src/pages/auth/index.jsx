@@ -21,6 +21,8 @@ const Auth = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [loginLoading, setLoginLoading] = useState(false);
+  const [signupLoading, setSignupLoading] = useState(false);
   const validateLogin=() => {
     if(!email.length) {
       toast.error("Please enter the email");
@@ -50,6 +52,7 @@ const Auth = () => {
 
 const handleLogin = async () => {
   if (validateLogin()) {
+    setLoginLoading(true);
     try {
       const res = await apiClient.post(LOGIN_ROUTE, { email, password }, { withCredentials: true });
 
@@ -69,18 +72,27 @@ const handleLogin = async () => {
       } else {
         toast.error("Login failed. Please try again.");
       }
+    } finally {
+      setLoginLoading(false);
     }
   }
 };
 
   const handleSignup = async () => {
     if(validateSignup()) {
-      const res = await apiClient.post(SIGNUP_ROUTE,{email,password},{withCredentials: true})
-      if(res.status === 201) {
-        setUserInfo(res.data.user);
-        navigate("/profile");
+      setSignupLoading(true);
+      try {
+        const res = await apiClient.post(SIGNUP_ROUTE,{email,password},{withCredentials: true})
+        if(res.status === 201) {
+          setUserInfo(res.data.user);
+          navigate("/profile");
+        }
+        console.log(res, res.status)
+      } catch (error) {
+        toast.error("Signup failed. Please try again.", { description: error.response?.data || "An error occurred during signup." });
+      } finally {
+        setSignupLoading(false);
       }
-      console.log(res, res.status)
     }
   };
 
@@ -131,8 +143,9 @@ const handleLogin = async () => {
                 <Button
                   className="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2"
                   onClick={handleLogin}
+                  loading={loginLoading}
                 >
-                  Login
+                  {loginLoading ? "Logging in..." : "Login"}
                 </Button>
               </TabsContent>
               <TabsContent className="flex flex-col gap-5 mt-4" value="signup">
@@ -160,8 +173,9 @@ const handleLogin = async () => {
                 <Button
                   className="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2"
                   onClick={handleSignup}
+                  loading={signupLoading}
                 >
-                  SignUp
+                  {signupLoading ? "Signing up..." : "SignUp"}
                 </Button>
               </TabsContent>
             </Tabs>

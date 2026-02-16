@@ -158,6 +158,12 @@ return (
         placeholder="Type a message..."
         value={message}
         onChange={(e) => setMessage(e.target.value)}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" && !e.shiftKey) {
+            e.preventDefault();
+            handleSendMessage();
+          }
+        }}
         className="bg-transparent text-white placeholder-neutral-400 p-2 sm:p-3 rounded-md flex-1 focus:border-none focus:outline-none"
       />
       <div className="flex flex-row gap-2 sm:gap-3 items-center ml-2">

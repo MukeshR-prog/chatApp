@@ -29,6 +29,7 @@ const CreateChannel = () => {
   const [allContacts, setAllContacts] = useState([]);
   const [selectedContacts, SetSelectedContacts] = useState([]);
   const [channelName, setChannelName] = useState("");
+  const [createLoading, setCreateLoading] = useState(false);
   useEffect(() => {
     const getData = async () => {
       const res = await apiClient.get(GET_ALL_CONTACT_ROUTES, {
@@ -42,6 +43,7 @@ const CreateChannel = () => {
   const createChannel = async () => {
     try {
         if(channelName.length>0 && selectedContacts.length>0) {
+        setCreateLoading(true);
         const res = await apiClient.post(CREATE_CHANNELS,{
             name: channelName,
             members: selectedContacts.map((contact)=> contact.value)
@@ -59,6 +61,8 @@ const CreateChannel = () => {
         
     } catch (error) {
         console.log(error);
+    } finally {
+        setCreateLoading(false);
     }
   };
 
@@ -108,8 +112,9 @@ const CreateChannel = () => {
             <Button
               className="w-full bg-purple-700 hover:bg-purple-900 transition-all duration-300"
               onClick={createChannel}
+              loading={createLoading}
             >
-              Create Channel
+              {createLoading ? "Creating..." : "Create Channel"}
             </Button>
           </div>
         </DialogContent>

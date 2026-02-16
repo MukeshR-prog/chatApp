@@ -33,25 +33,28 @@ const ContactContainer = () => {
       }, [directMessagesContacts]);
 
   return (
-    <div className='relative w-full md:w-[35vw] lg:w-[30vw] xl:w-[20vw] bg-[#1b1c24] border-r-2 border-[#2f303b]'
-    >
+    <div className='relative h-screen w-full md:w-[35vw] lg:w-[30vw] xl:w-[20vw] bg-[#1b1c24] border-r-2 border-[#2f303b] flex flex-col'>
     <Logo/>
-    <div className='my-3'>
-        <div className='flex items-center justify-between pr-10'>
-            <Title text='Direct Messages'/>
-            <NewDm/>
+    <div className='flex-1 flex flex-col min-h-0 pb-20'>
+        {/* Direct Messages Section */}
+        <div className='flex-1 flex flex-col min-h-0 my-2'>
+            <div className='flex items-center justify-between pr-10 flex-shrink-0'>
+                <Title text='Direct Messages'/>
+                <NewDm/>
+            </div>
+            <div className='flex-1 overflow-y-auto min-h-0' style={{ scrollbarWidth: 'thin', scrollbarColor: '#4a4a4a #1b1c24' }}>
+                <ContactLists contacts={directMessagesContacts}/>
+            </div>
         </div>
-        <div className={`max-h-[38vh] overflow-y-auto ${directMessagesContacts.length > 5 ? 'scrollbar-hide' : ''}`}  style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
-            <ContactLists contacts={directMessagesContacts}/>
-        </div>
-    </div>
-    <div className='my-3'>
-        <div className='flex items-center justify-between pr-10'>
-            <Title text='Channels'/>
-            <CreateChannel/>
-        </div>
-        <div className={`max-h-[38vh] overflow-y-auto ${directMessagesContacts.length > 5 ? 'scrollbar-hide' : ''}`}  style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
-            <ContactLists contacts={channels} isChannel={true}/>
+        {/* Channels Section */}
+        <div className='flex-1 flex flex-col min-h-0 my-2'>
+            <div className='flex items-center justify-between pr-10 flex-shrink-0'>
+                <Title text='Channels'/>
+                <CreateChannel/>
+            </div>
+            <div className='flex-1 overflow-y-auto min-h-0' style={{ scrollbarWidth: 'thin', scrollbarColor: '#4a4a4a #1b1c24' }}>
+                <ContactLists contacts={channels} isChannel={true}/>
+            </div>
         </div>
     </div>
     <ProfileInfo/>
